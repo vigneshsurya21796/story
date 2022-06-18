@@ -1,2 +1,48 @@
-sachin tendulkar was born on april 24,1973 at bandhra in Mumbai. dffsdfs
-ffgdfgdg
+import React from "react";
+import "../styles/intro.css";
+import Wallpaper from "./Wallpaper";
+import Quicksearch from "./Quicksearch";
+import axios from "axios";
+
+class home extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      locations: [],
+      meals: [],
+    };
+  }
+  componentDidMount() {
+    axios({
+      method: "GET",
+      url: "http://localhost:5262/locations",
+      headers: { "content-Type": "application/json" },
+    })
+      .then((response) => {
+        this.setState({ locations: response.data.locations });
+      })
+      .catch((err) => {});
+
+    axios({
+      method: "GET",
+      url: "http://localhost:5262/meals",
+      headers: { "content-Type": "application/json" },
+    })
+      .then((response) => {
+        this.setState({ meals: response.data.meals });
+      })
+      .catch((err) => {});
+  }
+
+  render() {
+    const { locations, meals } = this.state;
+    return (
+      <div>
+        <Wallpaper locationsdata={locations} />
+        <Quicksearch mealsdata={meals} />
+      </div>
+    );
+  }
+}
+
+export default home;
